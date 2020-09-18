@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Comparator;
+import java.util.Date;
 
 import com.mongodb.client.result.DeleteResult;
 import com.td.todolist.model.Todo;
@@ -37,7 +39,9 @@ public class TodoController {
      */
     @GetMapping("/todos")
     public List<Todo> todos() {
-        return _mongoTemplate.findAll(Todo.class);
+        List<Todo> todos = _mongoTemplate.findAll(Todo.class);
+        todos.sort(Comparator.comparing(Todo::getCreatedAt).reversed());
+        return todos;
     }
 
     /**

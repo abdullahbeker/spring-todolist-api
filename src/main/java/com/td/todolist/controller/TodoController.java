@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Comparator;
-import java.util.Date;
 
-import com.mongodb.client.result.DeleteResult;
 import com.td.todolist.model.Todo;
 
 @CrossOrigin
@@ -70,10 +68,11 @@ public class TodoController {
     /**
      * Delete a todo
      * 
-     * @return delete status
+     * @return true if delete was acknowledged else false
      */
     @PostMapping("/deleteTodo")
-    public DeleteResult deleteTodo(@RequestBody Todo todo) {
-        return _mongoTemplate.remove(new Query(Criteria.where("id").is(new ObjectId(todo.getId()))), Todo.class);
+    public boolean deleteTodo(@RequestBody Todo todo) {
+        return _mongoTemplate.remove(new Query(Criteria.where("id").is(new ObjectId(todo.getId()))), Todo.class)
+                .wasAcknowledged();
     }
 }
